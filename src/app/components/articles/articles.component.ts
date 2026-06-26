@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IonGrid, IonRow, IonCard, IonCardSubtitle, IonCardTitle, IonImg, IonCardContent, IonCol } from "@ionic/angular/standalone";
+import { IonGrid, IonRow, IonCol } from "@ionic/angular/standalone";
 import { Article } from 'src/app/interfaces';
 import { ArticleComponent } from "../article/article.component";
 
@@ -7,7 +7,7 @@ import { ArticleComponent } from "../article/article.component";
   selector: 'app-articles',
   templateUrl: './articles.component.html',
   styleUrls: ['./articles.component.scss'],
-  imports: [IonGrid, IonRow, IonCard, IonCardSubtitle, IonCardTitle, IonImg, IonCardContent, IonCol, ArticleComponent],
+  imports: [IonGrid, IonRow, IonCol, ArticleComponent],
 })
 export class ArticlesComponent  implements OnInit {
 

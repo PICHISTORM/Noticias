@@ -17,13 +17,13 @@ export class NewsService {
 
 
   gettopHeadlines():Observable<Article[]> {
-    return this.http.get<NewsResponse>(`https://newsapi.org/v2/everything?q=tesla&from=2026-05-25&sortBy=publishedAt`,{
+    const today = new Date().toISOString().split('T')[0];
+    return this.http.get<NewsResponse>(`https://newsapi.org/v2/everything?q=tesla&sortBy=publishedAt&pageSize=20`,{
       params:{apiKey}
     }).pipe(
       map(({articles}) => articles)
     );
-
-}
+  }
 
 
 
