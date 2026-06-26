@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/standalone';
 import { ExploreContainerComponent } from '../../explore-container/explore-container.component';
+import { NewsService } from '../../services/news.service';
+import { NewsResponse } from 'src/app/interfaces';
 
 @Component({
   selector: 'app-tab1',
@@ -9,5 +11,16 @@ import { ExploreContainerComponent } from '../../explore-container/explore-conta
   imports: [IonHeader, IonToolbar, IonTitle, IonContent, ExploreContainerComponent],
 })
 export class Tab1Page {
-  constructor() {}
+  constructor(private newsService: NewsService) {}
+
+
+ngOnInit() {
+  this.newsService.gettopHeadlines()
+    .subscribe({
+      next: (articles) => {
+        console.log(articles);
+      },
+
+    });
+  }
 }
