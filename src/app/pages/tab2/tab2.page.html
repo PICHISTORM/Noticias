@@ -6,7 +6,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" forceOverscroll="true">
   <ion-header collapse="condense" mode="ios" class="ion-no-border">
     <ion-toolbar>
       <ion-title size="large">Encabezados</ion-title>
@@ -20,7 +20,22 @@
       </ion-segment-button>
     }
 
-
   </ion-segment>
+
+  <app-articles
+    [articles]="articles">
+  </app-articles>
+
+  <ion-infinite-scroll
+    #infinite
+    threshold="25%"
+    position="bottom"
+    (ionInfinite)="loadData()">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Cargando ...">
+
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
 </ion-content>

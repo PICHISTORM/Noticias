@@ -1,5 +1,5 @@
-import { Component, OnInit, viewChild } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonInfiniteScroll } from '@ionic/angular/standalone';
+import { Component, OnInit } from '@angular/core';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonInfiniteScroll, IonInfiniteScrollContent } from '@ionic/angular/standalone';
 import { NewsService } from '../../services/news.service';
 import { Article } from 'src/app/interfaces';
 import { ArticlesComponent } from '../../components/articles/articles.component';
@@ -8,11 +8,9 @@ import { ArticlesComponent } from '../../components/articles/articles.component'
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonInfiniteScroll, ArticlesComponent],
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonInfiniteScroll, IonInfiniteScrollContent, ArticlesComponent],
 })
 export class Tab1Page implements OnInit {
-
-  private readonly infiniteScroll = viewChild(IonInfiniteScroll);
 
   public articles: Article[] = [];
   public isLoading = true;
@@ -21,7 +19,11 @@ export class Tab1Page implements OnInit {
   constructor(private newsService: NewsService) {}
 
   ngOnInit() {
-    this.newsService.gettopHeadlines()
+    this.loadInitialArticles();
+  }
+
+  private loadInitialArticles() {
+    this.newsService.gettopHeadlines(false)
       .subscribe({
         next: (articles) => {
           this.articles = articles;
@@ -31,29 +33,27 @@ export class Tab1Page implements OnInit {
           console.error('Error loading articles:', error);
           this.error = 'Error cargando noticias';
           this.isLoading = false;
-        },
-        complete: () => {
-          console.log('Articles loaded successfully');
         }
       });
   }
 
-  loadData(){
-    const infiniteScroll = this.infiniteScroll();
+  loadData(event: Event) {
+    const infiniteScroll = event.target as HTMLIonInfiniteScrollElement;
 
-    this.newsService.gettopHeadlines()
-      .subscribe(articles => {
-        if (!infiniteScroll) {
-          return;
+    this.newsService.gettopHeadlines(true)
+      .subscribe({
+        next: (articles) => {
+          this.articles = articles;
+          infiniteScroll.complete();
+
+          if (this.newsService.isTopHeadlinesLoadedCompletely()) {
+            infiniteScroll.disabled = true;
+          }
+        },
+        error: (error) => {
+          console.error('Error loading more articles:', error);
+          infiniteScroll.complete();
         }
-
-        if (articles.length === this.articles.length) {
-          infiniteScroll.disabled = true;
-          return;
-        }
-
-        this.articles = articles;
-        infiniteScroll.complete();
       });
   }
 }
