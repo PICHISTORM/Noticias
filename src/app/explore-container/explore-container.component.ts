@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-explore-container',
+  standalone: true,
+  imports: [],
   templateUrl: './explore-container.component.html',
   styleUrls: ['./explore-container.component.scss'],
 })
